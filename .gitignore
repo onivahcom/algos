@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+
+# Environment
+.env
+venv/
+*.env
+
+# Model files (optional, if large)
+# spam_model.pkl
+
+# IDE
+.vscode/
+.idea/
+.DS_Store
