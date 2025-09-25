@@ -1,0 +1,49 @@
+name: Python CI/CD
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy Python
+        uses: appleboy/ssh-action@v0.1.7
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          script: |
+            cd /var/www/algos
+
+            # Pull latest code
+            git pull origin main
+
+            # Create virtual environment only if it doesn't exist
+            if [ ! -d "venv" ]; then
+              python3 -m venv venv
+            fi
+
+            # Activate virtual environment
+            source venv/bin/activate
+
+            # Upgrade pip
+            pip install --upgrade pip
+
+            # Install dependencies
+            if [ -f "requirements.txt" ]; then
+              pip install -r requirements.txt
+            fi
+
+            # Restart or start PM2 process
+            if pm2 describe algos > /dev/null 2>&1; then
+              pm2 restart algos
+            else
+              pm2 start venv/bin/uvicorn --name algos -- main:app --host 0.0.0.0 --port 8000
+            fi
+
+            # Save PM2 process list
+            pm2 save
