@@ -17,7 +17,7 @@ app = FastAPI()
 
 @app.get("/")
 def home():
-    return {"message": "Python service is running 🚀"}
+    return {"message": "Python service is running successfully🚀"}
 
 
 @app.post("/search")
