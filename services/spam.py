@@ -9,7 +9,7 @@ from sklearn.metrics import accuracy_score
 MODEL_PATH = "models/spam_model.pkl"
 
 
-def train_and_save_model():
+def train_and_save_model(): 
     """Train spam detection model if no model.pkl exists"""
     print("Training new spam model...")
 
